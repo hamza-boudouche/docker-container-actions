@@ -12,6 +12,7 @@ outputs:
 runs:
   using: 'docker'
   image: 'subcomponent/Dockerfile'
+
   args:
     - ${{ inputs.who-to-greet }}
 
