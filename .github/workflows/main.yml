@@ -3,18 +3,23 @@ on: [push]
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: A job to build and run an image
     steps:
       # To use this repository's private action,
       # you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Hello world action step !!
-        uses: ./ # Uses an action in the root directory
-        id: hello
+      - name: Build
+        uses: docker/build-push-action@v4
         with:
-          who-to-greet: 'Mona the Octocat'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+          context: .
+          push: true
+          tags: my_registry:${{ github.run_number }}
+          cache-from: |
+            type=registry,ref=my_registry:cache
+          cache-to: |
+            type=registry,ref=my_registry:cache,mode=max
+          outputs: type=docker,dest=./myimage.tar
+      - name: run
+        run: |
+          docker load --input ./myimage.tar
+          docker run my_registry:${{ github.run_number }}
 
