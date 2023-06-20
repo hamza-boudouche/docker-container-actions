@@ -7,10 +7,13 @@ jobs:
     steps:
       # To use this repository's private action,
       # you must check out the repository
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Build
         uses: docker/build-push-action@v4
         with:
           context: .
+          push: true
           tags: my_registry:${{ github.run_number }}
           cache-from: |
             type=registry,ref=my_registry:cache
