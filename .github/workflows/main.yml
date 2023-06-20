@@ -20,8 +20,8 @@ jobs:
           cache-to: |
             type=registry,ref=my_registry:cache,mode=max
           outputs: type=docker,dest=./myimage.tar
-      - name: run
-        run: |
-          docker load --input ./myimage.tar
-          docker run my_registry:${{ github.run_number }}
+      # - name: run
+      #   run: |
+      #     docker load --input ./myimage.tar
+      #     docker run my_registry:${{ github.run_number }}
 
