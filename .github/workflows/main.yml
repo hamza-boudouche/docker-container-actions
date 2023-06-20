@@ -11,7 +11,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: true
           tags: my_registry:${{ github.run_number }}
           cache-from: |
             type=registry,ref=my_registry:cache
