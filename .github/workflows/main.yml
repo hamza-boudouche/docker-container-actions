@@ -19,21 +19,15 @@ jobs:
           tags: myimage:latest
           outputs: type=docker,dest=/tmp/myimage.tar
       -
-        name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: myimage
-          path: /tmp/myimage.tar
-      -
         name: prepare the service account key file
-        run: 'echo "$GCLOUD_KEY_FILE" > /usr/key-file.json'
+        run: 'echo "$GCLOUD_KEY_FILE" > ~/key-file.json'
         shell: bash
         env:
           GCLOUD_KEY_FILE: ${{secrets.GCLOUD_KEY_FILE}}
       -
         name: Load image
         run: |
-          docker run -v /usr/key-file.json:/usr/key-file.json \
+          docker run -v /usr/key-file.json:~/key-file.json \
                     -e BUCKET_NAME=$BUCKET_NAME \
                     myimage \
                     /run/deploy.sh
