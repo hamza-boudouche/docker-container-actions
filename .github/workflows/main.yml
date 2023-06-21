@@ -17,6 +17,7 @@ jobs:
         with:
           context: .
           tags: myimage:latest
+          load: true
       -
         name: prepare the service account key file
         run: 'echo "$GCLOUD_KEY_FILE" > ~/key-file.json'
