@@ -49,5 +49,5 @@ jobs:
         name: Load image
         run: |
           docker load --input /tmp/myimage.tar
-          docker run myimage /run/deploy.sh
+          docker run -v /usr/key-file.json:/usr/key-file.json -e BUCKET_NAME=$BUCKET_NAME myimage /run/deploy.sh
 
