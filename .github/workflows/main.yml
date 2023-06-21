@@ -1,8 +1,9 @@
 on: [push]
 
 jobs:
-  build:
+  build_deploy:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       -
         name: Checkout
@@ -23,31 +24,19 @@ jobs:
         with:
           name: myimage
           path: /tmp/myimage.tar
-
-  use:
-    runs-on: ubuntu-latest
-    environment: dev
-    needs: build
-    steps:
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      -
-        name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: myimage
-          path: /tmp
       -
         name: prepare the service account key file
-        run: echo ${{ secrets.GCLOUD_KEY_FILE }} > /usr/key-file.json
-      -
-        name: prepare the env vars
-        run: |
-          export $BUCKET_NAME=${{ secrets.BUCKET_NAME }}
+        run: 'echo "$GCLOUD_KEY_FILE" > /usr/key-file.json'
+        shell: bash
+        env:
+          GCLOUD_KEY_FILE: ${{secrets.GCLOUD_KEY_FILE}}
       -
         name: Load image
         run: |
-          docker load --input /tmp/myimage.tar
-          docker run -v /usr/key-file.json:/usr/key-file.json -e BUCKET_NAME=$BUCKET_NAME myimage /run/deploy.sh
-
+          docker run -v /usr/key-file.json:/usr/key-file.json \
+                    -e BUCKET_NAME=$BUCKET_NAME \
+                    myimage \
+                    /run/deploy.sh
+        shell: bash
+        env:
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
