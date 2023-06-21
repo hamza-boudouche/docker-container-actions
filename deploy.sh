@@ -1,4 +1,4 @@
-gcloud auth activate-service-account --key-file=$HOME/key-file.json
+gcloud auth activate-service-account --key-file=/usr/key-file.json
 
 gcloud storage cp /usr/public/* gs://$BUCKET_NAME
 

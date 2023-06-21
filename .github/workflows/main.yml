@@ -27,7 +27,7 @@ jobs:
       -
         name: Load image
         run: |
-          docker run -v /usr/key-file.json:$HOME/key-file.json \
+          docker run -v $HOME/key-file.json:/usr/key-file.json \
                     -e BUCKET_NAME=$BUCKET_NAME \
                     myimage \
                     /run/deploy.sh
